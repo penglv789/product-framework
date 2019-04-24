@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pl.product.repository.UserMapper">
+    <resultMap id="SysUserResultMap" type="User">
+        <id property="id" column="id" javaType="java.lang.Long" jdbcType="BIGINT"/>
+        <result property="pf_username" column="pf_username" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="pf_password" column="pf_password" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="age" column="age" javaType="java.lang.Integer" jdbcType="INT"/>
+    </resultMap>
+    <delete id="deleteById">
+        delete from pf_user where id=#{id}
+    </delete>
+    <select id="selectAll" resultMap="SysUserResultMap">
+        select * from pf_user
+    </select>
+    <select id="selectByAcounnt" resultMap="SysUserResultMap">
+        select * from pf_user where pf_username=#{username} and pf_password=#{password}
+    </select>
+    <insert id="save" parameterMap="com.pl.product.entity.User">
+        insert into pf_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            pf_username,
+            pf_password,
+            <if test="age != null">
+                age,
+            </if>
+        </trim>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{id,jdbcType=BIGINT},
+            #{pf_username,jdbcType=VARCHAR},
+            #{pf_password,jdbcType=VARCHAR},
+            <if test="age != null">
+                #{age,jdbcType=INT}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterMap="com.pl.product.entity.User">
+        update pf_user
+        <set>
+            <if test="pf_username != null">
+                username = #{pf_username,jdbcType=VARCHAR},
+            </if>
+            <if test="pf_password != null">
+                pf_password = #{pf_password,jdbcType=VARCHAR},
+            </if>
+            <if test="age != null">
+                age = #{age,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectById" resultMap="SysUserResultMap">
+        select
+        *
+        from pf_user
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+</mapper>
